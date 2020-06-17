@@ -11,6 +11,7 @@
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
     <RootNamespace>weather_display</RootNamespace>
+    <UserSecretsId>b7d327cc-8282-4860-bd5c-16a70ec3f9a2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
