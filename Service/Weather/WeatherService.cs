@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Weathery.Service.Weather.Model;
@@ -11,6 +13,7 @@ namespace Weathery.Service.Weather
 
         private readonly IConfiguration _configuration;
         private HttpClient _httpClient;
+        private readonly string _appId;
 
         public WeatherService(
             IConfiguration configuration,
@@ -18,11 +21,18 @@ namespace Weathery.Service.Weather
         {
             _configuration = configuration;
             _httpClient = clientFactory.CreateClient();
+            _appId = _configuration["OWA:appid"];
         }
 
-        public async Task<WeatherDTO> GetWeather()
+        public async Task<WeatherDTO> GetWeatherFromCity(string city)
         {
-            return new WeatherDTO();
+            _httpClient.BaseAddress = new Uri(_baseAddress);
+            var response =
+                await _httpClient.GetAsync($"/data/2.5/weather?q={city}&appid={_appId}");
+            response.EnsureSuccessStatusCode();
+
+            var stringResult = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<WeatherDTO>(stringResult);
         }
     }
 }
