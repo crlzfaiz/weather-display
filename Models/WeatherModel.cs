@@ -1,6 +1,6 @@
-﻿namespace Weathery.Service.Weather.Model
+﻿namespace Weathery.Models
 {
-    public class WeatherDTO
+    public class WeatherModel
     {
         public Coord coord { get; set; }
         public Weather[] weather { get; set; }

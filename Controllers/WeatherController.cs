@@ -1,26 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Weathery.Models;
+using Weathery.Services.Weather;
 
 namespace Weathery.Controllers
 {
     [Route("api/[controller]")]
-    public class SampleDataController : Controller
-    {        
-        private readonly IConfiguration _configuration;
-        private readonly string _appId;
+    public class WeatherController : Controller
+    {
+        private IWeatherService _weatherService;
+        private readonly IMapper _mapper;
         private static string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
 
-        public SampleDataController(IConfiguration configuration)
+        public WeatherController(
+            IWeatherService weatherService,
+            IMapper mapper)
         {
-            _configuration = configuration;
-            _appId = _configuration["OWA:appid"];
+            _weatherService = weatherService;
+            _mapper = mapper;
         }
 
         [HttpGet("[action]")]
@@ -35,26 +40,6 @@ namespace Weathery.Controllers
             });
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> WeatherByCity(string city)
-        //{
-        //    //TODO: sanitize string city input
-        //    string requestString = $"/data/2.5/weather?q={city}&appid={_appId}";
-        //    using (var client = new HttpClient())
-        //    {
-        //        try
-        //        {
-        //            client.BaseAddress = new Uri(_baseAddress);
-        //            var response =
-        //                await client.PostAsync(requestString);
-        //        }
-        //        catch ()
-        //        {
-
-        //        }
-        //    }
-        //}
-
         public class WeatherForecast
         {
             public string DateFormatted { get; set; }
@@ -68,6 +53,15 @@ namespace Weathery.Controllers
                     return 32 + (int)(TemperatureC / 0.5556);
                 }
             }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<WeatherModel> GetWeatherFromCity()
+        {
+            var dto = await _weatherService.GetWeatherFromCity("London");
+            var model = _mapper.Map<WeatherModel>(dto);
+
+            return model;
         }
     }
 }

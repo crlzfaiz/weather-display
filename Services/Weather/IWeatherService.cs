@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Weathery.Service.Weather.Model;
+using Weathery.Services.Weather.Model;
 
-namespace Weathery.Service.Weather
+namespace Weathery.Services.Weather
 {
     public interface IWeatherService
     {
