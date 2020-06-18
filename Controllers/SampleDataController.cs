@@ -1,18 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
-namespace weather_display.Controllers
+namespace Weathery.Controllers
 {
     [Route("api/[controller]")]
     public class SampleDataController : Controller
-    {
+    {        
+        private readonly IConfiguration _configuration;
+        private readonly string _appId;
         private static string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+
+
+        public SampleDataController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _appId = _configuration["OWA:appid"];
+        }
 
         [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts()
@@ -25,6 +34,26 @@ namespace weather_display.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             });
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> WeatherByCity(string city)
+        //{
+        //    //TODO: sanitize string city input
+        //    string requestString = $"/data/2.5/weather?q={city}&appid={_appId}";
+        //    using (var client = new HttpClient())
+        //    {
+        //        try
+        //        {
+        //            client.BaseAddress = new Uri(_baseAddress);
+        //            var response =
+        //                await client.PostAsync(requestString);
+        //        }
+        //        catch ()
+        //        {
+
+        //        }
+        //    }
+        //}
 
         public class WeatherForecast
         {

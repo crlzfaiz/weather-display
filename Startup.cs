@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace weather_display
+namespace Weathery
 {
     public class Startup
     {
@@ -21,6 +21,7 @@ namespace weather_display
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHttpClient();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
