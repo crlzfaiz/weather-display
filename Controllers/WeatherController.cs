@@ -55,13 +55,21 @@ namespace Weathery.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<WeatherModel> GetWeatherFromCity()
+        [HttpGet("[action]/{city}")]
+        public async Task<IActionResult> GetWeatherFromCity(string city)
         {
-            var dto = await _weatherService.GetWeatherFromCity("London");
-            var model = _mapper.Map<WeatherModel>(dto);
+            try
+            {
+                // Sanitize string input
+                var dto = await _weatherService.GetWeatherFromCity(city);
+                var model = _mapper.Map<WeatherModel>(dto);
 
-            return model;
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

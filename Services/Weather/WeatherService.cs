@@ -11,7 +11,6 @@ namespace Weathery.Services.Weather
     {
         const string _baseAddress = @"http://api.openweathermap.org";
 
-        private readonly IConfiguration _configuration;
         private HttpClient _httpClient;
         private readonly string _appId;
 
@@ -19,14 +18,13 @@ namespace Weathery.Services.Weather
             IConfiguration configuration,
             IHttpClientFactory clientFactory)
         {
-            _configuration = configuration;
             _httpClient = clientFactory.CreateClient();
-            _appId = _configuration["OWA:appid"];
+            _httpClient.BaseAddress = new Uri(_baseAddress);
+            _appId = configuration["OWA:appid"];
         }
 
         public async Task<WeatherDTO> GetWeatherFromCity(string city)
-        {
-            _httpClient.BaseAddress = new Uri(_baseAddress);
+        {            
             var response =
                 await _httpClient.GetAsync($"/data/2.5/weather?q={city}&appid={_appId}");
             response.EnsureSuccessStatusCode();
