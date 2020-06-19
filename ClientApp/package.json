@@ -1,11 +1,11 @@
 {
-  "name": "weather_display",
+  "name": "Weathery",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng run weather_display:server:dev",
+    "build:ssr": "ng run Weathery:server:dev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
