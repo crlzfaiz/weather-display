@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Weathery.Mappings;
 using Weathery.Services.Weather;
 
@@ -26,6 +27,11 @@ namespace Weathery
             services.AddHttpClient();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddSingleton<IWeatherService, WeatherService>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Weathery Api", Version = "v1"});
+            });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -51,6 +57,14 @@ namespace Weathery
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            // Enable middleware to serve generated Swagger as JSON endpoint
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Weathery API");
+            });
 
             app.UseMvc(routes =>
             {
